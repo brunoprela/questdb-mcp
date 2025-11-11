@@ -40,6 +40,14 @@
   ],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunoprela/questdb-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brunoprela/questdb-mcp/issues"
+  },
+  "homepage": "https://github.com/brunoprela/questdb-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.21.1",
     "@questdb/nodejs-client": "^4.1.0"

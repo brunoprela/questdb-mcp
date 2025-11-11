@@ -1,0 +1,39 @@
+# Source files
+src/
+tsconfig.json
+
+# Development files
+*.log
+.env
+.env.*
+.DS_Store
+
+# Development dependencies (already handled by package.json)
+node_modules/
+
+# Build artifacts that shouldn't be published
+*.tsbuildinfo
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files (if you add them later)
+test/
+tests/
+__tests__/
+*.test.ts
+*.spec.ts
+
+# Documentation (README.md is included via package.json files field)
+
+# Examples (if you add them later)
+examples/
+
