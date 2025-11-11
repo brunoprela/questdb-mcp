@@ -6,6 +6,35 @@ import { Logger } from "./logger.js";
 import { registerTools } from "./tools/index.js";
 
 /**
+ * Options for QuestDBMCPServer
+ */
+export interface QuestDBMCPServerOptions {
+    /**
+     * Whether to set up process signal handlers (SIGINT, SIGTERM, etc.)
+     * Defaults to true. Set to false when using as a library.
+     */
+    setupProcessHandlers?: boolean;
+    
+    /**
+     * Custom server name
+     * Defaults to "questdb-mcp"
+     */
+    serverName?: string;
+    
+    /**
+     * Custom server version
+     * Defaults to "1.0.0"
+     */
+    serverVersion?: string;
+    
+    /**
+     * Custom server instructions
+     * If not provided, uses default instructions
+     */
+    instructions?: string;
+}
+
+/**
  * Main MCP server class that orchestrates the QuestDB MCP server
  */
 export class QuestDBMCPServer {
@@ -14,20 +43,15 @@ export class QuestDBMCPServer {
     private logger: Logger;
     private config: QuestDBConfig;
     private transport: StdioServerTransport | null = null;
+    private setupProcessHandlers: boolean;
 
-    constructor(config: QuestDBConfig) {
+    constructor(config: QuestDBConfig, options: QuestDBMCPServerOptions = {}) {
         this.config = config;
-        this.mcpServer = new McpServer(
-            {
-                name: "questdb-mcp",
-                version: "1.0.0",
-            },
-            {
-                capabilities: {
-                    tools: {},
-                    resources: {},
-                },
-                instructions: `QuestDB MCP Server provides tools to interact with QuestDB time-series database.
+        this.setupProcessHandlers = options.setupProcessHandlers ?? true;
+        
+        const serverName = options.serverName || "questdb-mcp";
+        const serverVersion = options.serverVersion || "1.0.0";
+        const instructions = options.instructions || `QuestDB MCP Server provides tools to interact with QuestDB time-series database.
                 
 Available tools:
 - query: Execute SELECT queries on QuestDB tables
@@ -35,7 +59,19 @@ Available tools:
 - list_tables: List all tables in the database
 - describe_table: Get the schema of a specific table
 
-The server automatically creates tables and columns when inserting data. All queries are read-only (SELECT only) for safety.`,
+The server automatically creates tables and columns when inserting data. All queries are read-only (SELECT only) for safety.`;
+
+        this.mcpServer = new McpServer(
+            {
+                name: serverName,
+                version: serverVersion,
+            },
+            {
+                capabilities: {
+                    tools: {},
+                    resources: {},
+                },
+                instructions,
             }
         );
 
@@ -43,7 +79,9 @@ The server automatically creates tables and columns when inserting data. All que
         this.client = new QuestDBClient(config, this.logger);
 
         this.setupTools();
-        this.setupErrorHandling();
+        if (this.setupProcessHandlers) {
+            this.setupErrorHandling();
+        }
     }
 
     /**
@@ -86,7 +124,7 @@ The server automatically creates tables and columns when inserting data. All que
     /**
      * Shutdown the server and cleanup resources
      */
-    private async shutdown(): Promise<void> {
+    async shutdown(): Promise<void> {
         try {
             // Log shutdown (may fail if server disconnected, that's OK)
             this.logger.info("Shutting down QuestDB MCP server").catch(() => {
@@ -99,6 +137,30 @@ The server automatically creates tables and columns when inserting data. All que
         } catch (error) {
             console.error("Error during shutdown:", error);
         }
+    }
+    
+    /**
+     * Get the underlying MCP server instance
+     * Useful for advanced use cases
+     */
+    get server(): McpServer {
+        return this.mcpServer;
+    }
+    
+    /**
+     * Get the QuestDB client instance
+     * Useful for custom tool implementations
+     */
+    get questDBClient(): QuestDBClient {
+        return this.client;
+    }
+    
+    /**
+     * Get the logger instance
+     * Useful for custom tool implementations
+     */
+    get log(): Logger {
+        return this.logger;
     }
 
     /**

@@ -2,19 +2,41 @@
   "name": "questdb-mcp",
   "version": "1.0.0",
   "description": "Model Context Protocol server for QuestDB",
-  "main": "dist/index.js",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "import": "./dist/cli.js",
+      "types": "./dist/cli.d.ts"
+    }
+  },
+  "bin": {
+    "questdb-mcp": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
     "questdb",
     "model-context-protocol",
-    "time-series"
+    "time-series",
+    "database",
+    "mcp-server"
   ],
   "author": "",
   "license": "MIT",
@@ -26,6 +48,9 @@
     "@types/node": "^20.10.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
 

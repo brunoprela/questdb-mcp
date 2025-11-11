@@ -50,9 +50,11 @@ The server can be configured using environment variables:
 
 ## Usage
 
-### Running the Server
+This package can be used in two ways:
 
-The MCP server communicates via stdio, which is the standard way MCP servers are used with AI assistants.
+### 1. CLI Usage
+
+Run the MCP server directly:
 
 ```bash
 npm start
@@ -62,6 +64,183 @@ Or for development:
 
 ```bash
 npm run dev
+```
+
+Or install globally and run:
+
+```bash
+npm install -g questdb-mcp
+questdb-mcp
+```
+
+### 2. Library Usage
+
+Install as a dependency in your TypeScript project:
+
+```bash
+npm install questdb-mcp
+```
+
+#### Basic Usage
+
+```typescript
+import { QuestDBMCPServer, loadConfig } from 'questdb-mcp';
+
+// Load configuration from environment variables
+const config = loadConfig();
+
+// Create server instance
+const server = new QuestDBMCPServer(config);
+
+// Start the server
+await server.run();
+```
+
+#### Custom Configuration
+
+```typescript
+import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
+
+const config: QuestDBConfig = {
+  host: 'localhost',
+  port: 9000,
+  username: 'admin',
+  password: 'quest',
+};
+
+const server = new QuestDBMCPServer(config, {
+  setupProcessHandlers: false, // Don't set up process handlers when using as library
+  serverName: 'my-questdb-server',
+  serverVersion: '1.0.0',
+  instructions: 'Custom server instructions...',
+});
+
+await server.run();
+```
+
+#### Using with Custom Transport
+
+```typescript
+import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import express from 'express';
+
+const config: QuestDBConfig = {
+  host: 'localhost',
+  port: 9000,
+};
+
+const server = new QuestDBMCPServer(config, {
+  setupProcessHandlers: false,
+});
+
+const app = express();
+app.use(express.json());
+
+app.post('/mcp', async (req, res) => {
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+    enableJsonResponse: true,
+  });
+
+  res.on('close', () => {
+    transport.close();
+  });
+
+  await server.server.connect(transport);
+  await transport.handleRequest(req, res, req.body);
+});
+
+app.listen(3000, () => {
+  console.log('MCP server running on http://localhost:3000/mcp');
+});
+```
+
+#### Accessing Internal Components
+
+```typescript
+import { QuestDBMCPServer } from 'questdb-mcp';
+
+const server = new QuestDBMCPServer(config);
+
+// Access the underlying MCP server
+const mcpServer = server.server;
+
+// Access the QuestDB client
+const client = server.questDBClient;
+
+// Access the logger
+const logger = server.log;
+
+// Use the client directly
+const tables = await client.listTables();
+const result = await client.query('SELECT * FROM my_table LIMIT 10');
+
+// Use the logger
+await logger.info('Custom log message', { metadata: 'value' });
+```
+
+#### Creating Custom Tools
+
+```typescript
+import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
+import { z } from 'zod';
+
+const config: QuestDBConfig = {
+  host: 'localhost',
+  port: 9000,
+};
+
+const server = new QuestDBMCPServer(config, {
+  setupProcessHandlers: false,
+});
+
+// Access the underlying MCP server to register custom tools
+server.server.registerTool(
+  'my-custom-tool',
+  {
+    title: 'My Custom Tool',
+    description: 'A custom tool that uses QuestDB',
+    inputSchema: {
+      param: z.string().describe('A parameter'),
+    },
+  },
+  async ({ param }) => {
+    // Use the QuestDB client
+    const client = server.questDBClient;
+    const result = await client.query(`SELECT * FROM my_table WHERE col = '${param}'`);
+    
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
+  }
+);
+
+await server.run();
+```
+
+#### Shutdown
+
+```typescript
+// Gracefully shutdown the server
+await server.shutdown();
+```
+
+#### TypeScript Types
+
+All types are exported and available for use:
+
+```typescript
+import type {
+  QuestDBConfig,
+  QueryResult,
+  QuestDBMCPServerOptions,
+} from 'questdb-mcp';
 ```
 
 ### Available Tools

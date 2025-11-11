@@ -1,18 +1,7 @@
-#!/usr/bin/env node
-
-import { QuestDBMCPServer } from "./server.js";
-import { loadConfig } from "./config.js";
-
 /**
- * Main entry point for the QuestDB MCP server
+ * Library entry point - exports all public APIs
+ * For CLI usage, see ./cli.js
  */
-async function main() {
-    const config = loadConfig();
-    const server = new QuestDBMCPServer(config);
-    await server.run();
-}
 
-main().catch((error) => {
-    console.error("Fatal error:", error);
-    process.exit(1);
-});
+// Export everything from lib.ts
+export * from "./lib.js";
