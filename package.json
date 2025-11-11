@@ -1,5 +1,5 @@
 {
-  "name": "questdb-mcp",
+  "name": "@brunoprela/questdb-mcp",
   "version": "1.0.0",
   "description": "Model Context Protocol server for QuestDB",
   "type": "module",
@@ -16,7 +16,7 @@
     }
   },
   "bin": {
-    "questdb-mcp": "./dist/cli.js"
+    "questdb-mcp": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -48,6 +48,9 @@
     "url": "https://github.com/brunoprela/questdb-mcp/issues"
   },
   "homepage": "https://github.com/brunoprela/questdb-mcp#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.21.1",
     "@questdb/nodejs-client": "^4.1.0"
@@ -61,4 +64,3 @@
     "node": ">=18"
   }
 }
-
