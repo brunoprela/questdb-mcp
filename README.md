@@ -24,23 +24,13 @@ A Model Context Protocol (MCP) server for QuestDB that enables AI assistants to 
 
 ### As a Package
 
-Install from GitHub Packages:
+Install from npm:
 
 ```bash
-npm install @brunoprela/questdb-mcp
+npm install questdb-mcp
 ```
 
-**Authentication Required:** You'll need to authenticate to GitHub Packages. 
-
-1. Create a GitHub Personal Access Token (classic) with `read:packages` scope
-2. Create a `.npmrc` file in your project (or add to your global `~/.npmrc`):
-
-```
-@brunoprela:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
-```
-
-**Important:** Never commit the `.npmrc` file with your token to git. It should be in your `.gitignore`.
+**Note:** This package is publicly available on npm. No authentication or configuration is required to install or use it.
 
 ### From Source
 
@@ -88,29 +78,25 @@ Or for development:
 npm run dev
 ```
 
-Or install globally from GitHub Packages:
+Or install globally:
 
 ```bash
-npm install -g @brunoprela/questdb-mcp
+npm install -g questdb-mcp
 questdb-mcp
 ```
-
-**Note:** Make sure you're authenticated to GitHub Packages (see Installation section above).
 
 ### 2. Library Usage
 
 Install as a dependency in your TypeScript project:
 
 ```bash
-npm install @brunoprela/questdb-mcp
+npm install questdb-mcp
 ```
-
-**Note:** Make sure you're authenticated to GitHub Packages (see Installation section above).
 
 #### Basic Usage
 
 ```typescript
-import { QuestDBMCPServer, loadConfig } from '@brunoprela/questdb-mcp';
+import { QuestDBMCPServer, loadConfig } from 'questdb-mcp';
 
 // Load configuration from environment variables
 const config = loadConfig();
@@ -125,7 +111,7 @@ await server.run();
 #### Custom Configuration
 
 ```typescript
-import { QuestDBMCPServer, QuestDBConfig } from '@brunoprela/questdb-mcp';
+import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
 
 const config: QuestDBConfig = {
   host: 'localhost',
@@ -147,7 +133,7 @@ await server.run();
 #### Using with Custom Transport
 
 ```typescript
-import { QuestDBMCPServer, QuestDBConfig } from '@brunoprela/questdb-mcp';
+import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
 
@@ -185,7 +171,7 @@ app.listen(3000, () => {
 #### Accessing Internal Components
 
 ```typescript
-import { QuestDBMCPServer } from '@brunoprela/questdb-mcp';
+import { QuestDBMCPServer } from 'questdb-mcp';
 
 const server = new QuestDBMCPServer(config);
 
@@ -209,7 +195,7 @@ await logger.info('Custom log message', { metadata: 'value' });
 #### Creating Custom Tools
 
 ```typescript
-import { QuestDBMCPServer, QuestDBConfig } from '@brunoprela/questdb-mcp';
+import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
 import { z } from 'zod';
 
 const config: QuestDBConfig = {
@@ -266,7 +252,7 @@ import type {
   QuestDBConfig,
   QueryResult,
   QuestDBMCPServerOptions,
-} from '@brunoprela/questdb-mcp';
+} from 'questdb-mcp';
 ```
 
 ### Available Tools
@@ -386,7 +372,6 @@ The insert tool automatically maps JavaScript types to QuestDB types:
 - Only SELECT queries are allowed through the `query` tool for safety
 - The server uses the QuestDB REST API for queries and the InfluxDB Line Protocol for inserts
 - Authentication is supported via username/password if your QuestDB instance requires it
-- **GitHub Packages Authentication**: When using GitHub Packages, never commit your `.npmrc` file with your personal access token. The `.npmrc` file is gitignored and should remain local only. Use `.npmrc.example` as a template.
 
 ## Examples
 
