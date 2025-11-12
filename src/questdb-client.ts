@@ -157,7 +157,7 @@ export class QuestDBClient {
      * @returns Array of table names
      */
     async listTables(): Promise<string[]> {
-        const query = "SELECT name FROM tables() ORDER BY name";
+        const query = "SELECT table_name FROM tables() ORDER BY table_name";
         const result = await this.query(query, "json") as QueryResult;
 
         // Parse the result and format it nicely

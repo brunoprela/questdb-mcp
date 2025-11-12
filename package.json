@@ -1,6 +1,6 @@
 {
-  "name": "questdb-mcp",
-  "version": "1.0.0",
+  "name": "questdbmcp",
+  "version": "1.2.0",
   "description": "Model Context Protocol server for QuestDB",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,7 +16,7 @@
     }
   },
   "bin": {
-    "questdb-mcp": "dist/cli.js"
+    "questdbmcp": "dist/cli.js"
   },
   "files": [
     "dist",

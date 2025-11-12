@@ -27,7 +27,7 @@ A Model Context Protocol (MCP) server for QuestDB that enables AI assistants to 
 Install from npm:
 
 ```bash
-npm install questdb-mcp
+npm install questdbmcp
 ```
 
 **Note:** This package is publicly available on npm. No authentication or configuration is required to install or use it.
@@ -36,7 +36,7 @@ npm install questdb-mcp
 
 1. Clone this repository or navigate to the project directory:
    ```bash
-   cd questdb-mcp
+   cd questdbmcp
    ```
 
 2. Install dependencies:
@@ -81,8 +81,8 @@ npm run dev
 Or install globally:
 
 ```bash
-npm install -g questdb-mcp
-questdb-mcp
+npm install -g questdbmcp
+questdbmcp
 ```
 
 ### 2. Library Usage
@@ -90,13 +90,13 @@ questdb-mcp
 Install as a dependency in your TypeScript project:
 
 ```bash
-npm install questdb-mcp
+npm install questdbmcp
 ```
 
 #### Basic Usage
 
 ```typescript
-import { QuestDBMCPServer, loadConfig } from 'questdb-mcp';
+import { QuestDBMCPServer, loadConfig } from 'questdbmcp';
 
 // Load configuration from environment variables
 const config = loadConfig();
@@ -111,7 +111,7 @@ await server.run();
 #### Custom Configuration
 
 ```typescript
-import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
+import { QuestDBMCPServer, QuestDBConfig } from 'questdbmcp';
 
 const config: QuestDBConfig = {
   host: 'localhost',
@@ -133,7 +133,7 @@ await server.run();
 #### Using with Custom Transport
 
 ```typescript
-import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
+import { QuestDBMCPServer, QuestDBConfig } from 'questdbmcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
 
@@ -171,7 +171,7 @@ app.listen(3000, () => {
 #### Accessing Internal Components
 
 ```typescript
-import { QuestDBMCPServer } from 'questdb-mcp';
+import { QuestDBMCPServer } from 'questdbmcp';
 
 const server = new QuestDBMCPServer(config);
 
@@ -195,7 +195,7 @@ await logger.info('Custom log message', { metadata: 'value' });
 #### Creating Custom Tools
 
 ```typescript
-import { QuestDBMCPServer, QuestDBConfig } from 'questdb-mcp';
+import { QuestDBMCPServer, QuestDBConfig } from 'questdbmcp';
 import { z } from 'zod';
 
 const config: QuestDBConfig = {
@@ -252,7 +252,7 @@ import type {
   QuestDBConfig,
   QueryResult,
   QuestDBMCPServerOptions,
-} from 'questdb-mcp';
+} from 'questdbmcp';
 ```
 
 ### Available Tools
